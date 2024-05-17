@@ -63,3 +63,30 @@ function create_account()
     echo ""
     welcome_screen
 }
+# Function To Handle User Log In Process
+function login()
+{
+    # Check username and password from the users.txt file
+    echo -n "Enter your username: "
+    read username
+    echo -n "Enter your password: "
+    read password
+    if grep -q "^$username:$password:" users.txt; then
+        echo "Login successful!"
+        show_menu
+    else
+        echo "Invalid username or password."
+        echo ""
+        echo "1. Try again"
+        echo "2. Go back to the welcome screen"
+        read -p "Enter your choice: " retry_option
+        if [ "$retry_option" == "1" ]; then
+            login
+        elif [ "$retry_option" == "2" ]; then
+            welcome_screen
+        else
+            echo "Invalid option. Please try again."
+            login
+        fi
+    fi
+}
