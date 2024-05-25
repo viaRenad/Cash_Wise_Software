@@ -277,4 +277,90 @@ function search_expense_history()
     grep -i "^$username:.*$keyword" expenses.txt  
     echo ""
     expense_tracking "$username"
+}function budget_management()
+{
+    username=$1
+    echo "1. View Budgets"
+    echo "2. Add New Budget"
+    echo "3. Search Budget History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_budgets "$username";;
+        2) add_budget "$username";;
+        3) search_budget_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; budget_management "$username";;
+    esac
+}
+
+function view_budgets()
+{
+    username=$1
+    echo "Budgets for $username:"
+    echo ""
+    grep "^$username:" budgets.txt | cut -d':' -f2-
+    echo ""
+    budget_management "$username"
+}
+
+function add_budget()
+{
+    username=$1
+
+    if (( available_funds == 0 )); then
+        read -p "Enter the amount of funds available: " available_funds
+    fi
+
+    read -p "Enter Budget Name: " budget_name
+    read -p "Enter Amount for $budget_name: " budget_amount
+
+    if (( available_funds == 0 || budget_amount > available_funds )); then
+        echo "Current Balance $available_funds Does Not Cover The $budget_amount Budget"
+        echo ""
+        echo "Press (1) to Add Extra Money and Press any Key to Go Back to Menu"
+        read -p "Choose an option: " option
+
+        case $option in
+            1) add_extra_money "$username" "$budget_name" "$budget_amount";;
+            *) echo ""; budget_management "$username";;
+        esac
+    else
+        available_funds=$(( available_funds - budget_amount ))
+        echo "$username:$budget_name:$budget_amount" >> budgets.txt
+        echo ""
+        echo "Budget Added Successfully!"
+        echo ""
+        budget_management "$username"
+    fi
+}
+
+function add_extra_money()
+{
+    username=$1
+    budget_name=$2
+    budget_amount=$3
+
+    read -p "Enter The Amount for The Extra Funds: " extra_amount
+
+    available_funds=$(( available_funds + extra_amount ))
+    echo ""
+    echo "Additional funds added successfully!"
+    echo ""
+    add_budget "$username"
+}
+
+function search_budget_history()
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" budgets.txt 
+    echo ""
+    budget_management "$username"
 }
