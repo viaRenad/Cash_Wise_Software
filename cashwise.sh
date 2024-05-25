@@ -109,3 +109,172 @@ function login()
         fi
     fi
 }
+function expense_tracking() 
+{
+    username=$1
+    echo "1. View Expenses"
+    echo "2. Add New Expense"
+    echo "3. Search Expense History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_expenses "$username";;
+        2) add_expense "$username";;
+        3) search_expense_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; expense_tracking "$username";;
+    esac
+}
+
+function view_expenses()
+{
+    username=$1
+    echo "Expenses for $username:"
+    echo ""
+    grep "^$username:" expenses.txt | cut -d':' -f2-  
+    echo ""
+    expense_tracking "$username"
+}
+
+function add_expense() 
+{
+    username=$1
+    read -p "Enter Expense Name: " expense_name
+    read -p "Enter Amount: " amount
+    read -p "Enter Category: " category
+    read -p "Enter Payment Method: " payment_method
+
+    echo "$username:$expense_name:$amount:$category:$payment_method" >> expenses.txt
+    echo ""
+    echo "Expense Added Successfully!"
+    echo ""
+    expense_tracking "$username"
+}
+
+function search_expense_history() 
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" expenses.txt  
+    echo ""
+    expense_tracking "$username"
+}
+
+function expense_tracking() 
+{
+    username=$1
+    echo "1. View Expenses"
+    echo "2. Add New Expense"
+    echo "3. Search Expense History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_expenses "$username";;
+        2) add_expense "$username";;
+        3) search_expense_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; expense_tracking "$username";;
+    esac
+}
+
+function view_expenses()
+{
+    username=$1
+    echo "Expenses for $username:"
+    echo ""
+    grep "^$username:" expenses.txt | cut -d':' -f2-  
+    echo ""
+    expense_tracking "$username"
+}
+
+function add_expense() 
+{
+    username=$1
+    read -p "Enter Expense Name: " expense_name
+    read -p "Enter Amount: " amount
+    read -p "Enter Category: " category
+    read -p "Enter Payment Method: " payment_method
+
+    echo "$username:$expense_name:$amount:$category:$payment_method" >> expenses.txt
+    echo ""
+    echo "Expense Added Successfully!"
+    echo ""
+    expense_tracking "$username"
+}
+
+function search_expense_history() 
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" expenses.txt  
+    echo ""
+    expense_tracking "$username"
+}
+function expense_tracking() 
+{
+    username=$1
+    echo "1. View Expenses"
+    echo "2. Add New Expense"
+    echo "3. Search Expense History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_expenses "$username";;
+        2) add_expense "$username";;
+        3) search_expense_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; expense_tracking "$username";;
+    esac
+}
+
+function view_expenses()
+{
+    username=$1
+    echo "Expenses for $username:"
+    echo ""
+    grep "^$username:" expenses.txt | cut -d':' -f2-  
+    echo ""
+    expense_tracking "$username"
+}
+
+function add_expense() 
+{
+    username=$1
+    read -p "Enter Expense Name: " expense_name
+    read -p "Enter Amount: " amount
+    read -p "Enter Category: " category
+    read -p "Enter Payment Method: " payment_method
+
+    echo "$username:$expense_name:$amount:$category:$payment_method" >> expenses.txt
+    echo ""
+    echo "Expense Added Successfully!"
+    echo ""
+    expense_tracking "$username"
+}
+
+function search_expense_history() 
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" expenses.txt  
+    echo ""
+    expense_tracking "$username"
+}
