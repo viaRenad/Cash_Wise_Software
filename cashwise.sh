@@ -420,3 +420,108 @@ function search_debt_history()
     echo ""
     debt_management "$username"
 }
+function debt_management()
+{
+    username=$1
+    echo "1. View Debts"
+    echo "2. Add New Debt"
+    echo "3. Search Debt History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_debts "$username";;
+        2) add_debt "$username";;
+        3) search_debt_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; debt_management "$username";;
+    esac
+}
+
+function view_debts()
+{
+    username=$1
+    echo "Debts for $username:"
+    echo ""
+    grep "^$username:" debts.txt | cut -d':' -f2-
+    echo ""
+    debt_management "$username"
+}
+
+function add_debt()
+{
+    username=$1
+    read -p "Enter Debt Name: " debt_name
+    read -p "Enter Amount: " amount
+    read -p "Enter Creditor: " creditor
+    read -p "Enter Due Date: " due_date
+
+    echo "$username:$debt_name:$amount:$creditor:$due_date" >> debts.txt
+    echo ""
+    echo "Debt Added Successfully!"
+    echo ""
+    debt_management "$username"
+}
+
+function search_debt_history()
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" debts.txt | cut -d':' -f2- 
+    echo ""
+    debt_management "$username"
+}
+
+function show_menu()
+{
+    username=$1
+    echo ""
+    echo "======================================================================="
+    echo "                            Services Menu                              "
+    echo "======================================================================="
+    echo ""
+    echo "1. Expense Tracking"
+    echo "2. Budget Management"
+    echo "3. Debt Management"
+    echo "4. Logout (back to welcome screen)"
+    echo ""
+    read -p "Choose an option: " op
+
+    case $op in
+    "1")
+        echo ""
+        echo "======================================================================="
+        echo "                          Expense Tracking                             "
+        echo "======================================================================="
+        echo ""
+        expense_tracking "$username";;
+    "2")
+        echo ""
+        echo "======================================================================="
+        echo "                          Budget Management                            "
+        echo "======================================================================="
+        echo ""
+        budget_management "$username";;
+    "3")
+        echo ""
+        echo "======================================================================="
+        echo "                          Debt Management                              "
+        echo "======================================================================="
+        echo ""
+        debt_management "$username";;
+    "4") welcome_screen ;;
+    *)
+        echo ""
+        echo "Invalid Option, Please Try Again"
+        echo ""
+        ;;
+    esac
+    show_menu "$username"
+}
+
+welcome_screen
