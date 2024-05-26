@@ -364,3 +364,59 @@ function search_budget_history()
     echo ""
     budget_management "$username"
 }
+function debt_management()
+{
+    username=$1
+    echo "1. View Debts"
+    echo "2. Add New Debt"
+    echo "3. Search Debt History"
+    echo "4. Back to Menu"
+    echo ""
+    read -p "Enter Your Choice: " choice
+    echo ""
+
+    case $choice in
+        1) view_debts "$username";;
+        2) add_debt "$username";;
+        3) search_debt_history "$username";;
+        4) show_menu "$username";;
+        *) echo "Invalid Option, Please Try Again"; echo ""; debt_management "$username";;
+    esac
+}
+
+function view_debts()
+{
+    username=$1
+    echo "Debts for $username:"
+    echo ""
+    grep "^$username:" debts.txt | cut -d':' -f2-
+    echo ""
+    debt_management "$username"
+}
+
+function add_debt()
+{
+    username=$1
+    read -p "Enter Debt Name: " debt_name
+    read -p "Enter Amount: " amount
+    read -p "Enter Creditor: " creditor
+    read -p "Enter Due Date: " due_date
+
+    echo "$username:$debt_name:$amount:$creditor:$due_date" >> debts.txt
+    echo ""
+    echo "Debt Added Successfully!"
+    echo ""
+    debt_management "$username"
+}
+
+function search_debt_history()
+{
+    username=$1
+    read -p "Enter Search Keyword: " keyword
+    echo ""
+    echo "Search Results for '$keyword' for $username:"
+    echo ""
+    grep -i "^$username:.*$keyword" debts.txt | cut -d':' -f2- 
+    echo ""
+    debt_management "$username"
+}
